@@ -4,4 +4,4 @@ app = Flask(__name__)
 #Modified by naveen
 @app.route('/')
 def hello_world():
-    return 'Hello, World!'
+    return 'This is test of Render service!'

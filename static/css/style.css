@@ -20,3 +20,10 @@ product-slider { padding: 45px; }
 .carousel-control { background-color: rgba(0, 0, 0, 0); bottom: auto; font-size: 20px; left: 0; position: absolute; top: 30%; width: auto; }
 
 .carousel-control.right, .carousel-control.left { background-color: rgba(0, 0, 0, 0); background-image: none; }
+
+
+
+.image-picker { 
+  height : 600px; 
+  overflow-y: vertical;
+}

@@ -1,24 +1,64 @@
 
 <html>
     <head>
-      <title>Flask Intro</title>
+      <title>DL Demo</title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta charset="UTF-8">
       <link href="static/css/bootstrap.min.css" rel="stylesheet" media="screen">
-      <link href="static/css/style.css" rel="stylesheet" media="screen">
-
-      <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+      <link href="{{ url_for('static', filename='css/style2.css') }}" rel="stylesheet" >
+      <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
       <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
       <script src="static/js/bootstrap.min.js"></script>
       
       <!--
       <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script> 
       -->
+
+      <script typ="text/javascript"> 
+        $(document).ready(function(){
+            $('button').on('click', function(){
+                $.ajax({
+                    url: '/analyze', 
+                    type: 'POST',
+                    data: "imageid",  
+                    success: function(response){
+                        $("#analysis-output").html(
+                           "<p>" + response + "</p>" 
+                        );
+                    }, 
+                    error: function(error){
+                        console.log(error)
+                    }
+                });
+            });
+
+            $(".thumbnail").bind('click', function(){
+                console.log("in load image function .. ")
+                var img_src = $(this).attr("src");
+                $('#sel_image').attr("src",img_src);
+
+                $.ajax ({
+                    url: '/load_image', 
+                    type: 'POST', 
+                    data : "imageid",
+                    success : function(response){
+                        console.log ("something image received"); 
+                        console.log(response);
+                    },
+                    error: function(error){
+                        console.log("error in load image")
+                    }
+                });
+            });
+        });
+      
+      </script>
     </head>
     <body>
         <div class="row">
             <div class="col border bg-info">
-                    <h1 class="display-8 fg-white">Deep Learning Demo Application</h1> 
-                    <p> naveen.sabapathy@danaherdigital.com</p> 
+                    <h1 class="display-8 text-white">Deep Learning Demo Application</h1> 
+                    <p class="text-white"> naveen.sabapathy@danaherdigital.com</p> 
                 
             </div>
                     
@@ -33,71 +73,38 @@
             --> 
             <div class="row">
                 <div class="col-md-2 shadow border bg-light image-picker">
-                    <h4>Pick an image</h4> 
-                    <div class="row">
-                        <div class="col-md-12">
-                            <img src="http://placehold.it/1600x900?text=Product+03" class="d-block w-100 shadow border" alt="...">
-                        </div>
-                    </div>
-                    <hr class="my-6">
-                    <div class="row">
-                        <div class="col">
-                            <img src="http://placehold.it/1600x900?text=Product+03" class="d-block w-100" alt="...">
-                        </div>
-                    </div>
-                    <hr class="my-6">                    <div class="row">
-                    <div class="col-md-12">
-                            <img src="http://placehold.it/1600x900?text=Product+03" class="d-block w-100" alt="...">
-                        </div>
-                    </div>
-                    <hr class="my-6">
-                    <div class="row">
-                        <div class="col">
-                            <img src="http://placehold.it/1600x900?text=Product+03" class="d-block w-100" alt="...">
-                        </div>
-                    </div>
-                    <hr class="my-6">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <img src="http://placehold.it/1600x900?text=Product+03" class="d-block w-100" alt="...">
-                        </div>
-                    </div>
-                    <hr class="my-6">
-                    <div class="row">
-                        <div class="col">
-                            <img src="http://placehold.it/1600x900?text=Product+03" class="d-block w-100" alt="...">
-                        </div>
-                    </div>
-                    <hr class="my-6">
-                    <div class="row">
-                            <div class="col">
-                                <img src="http://placehold.it/1600x900?text=Product+03" class="d-block w-100" alt="...">
+                    <h5>Pick an image</h5>
+                    
+                    {%for item in img_list %}
+                        <div class="row">
+                            <div class="col-md-12">
+                                <img src={{ item }} class="mx-auto d-block w-75 shadow border thumbnail img-fluid" alt="...">
                             </div>
                         </div>
                         <hr class="my-6">
-                        <div class="row">
-                                <div class="col">
-                                    <img src="http://placehold.it/1600x900?text=Product+03" class="d-block w-100" alt="...">
-                                </div>
-                        </div>
-                        <hr class="my-6">
-                        <div class="row">
-                            <div class="col">
-                                <img src="http://placehold.it/1600x900?text=Product+03" class="d-block w-100" alt="...">
-                            </div>
-                        
-                        </div>
-                        <hr class="my-6">
-
-                        <div class="row">
-                            <div class="col">
-                                <img src="http://placehold.it/1600x900?text=Product+03" class="d-block w-100" alt="...">
-                            </div>
-                        </div>
-                        <hr class="my-6">
+                    {%endfor%}
                 </div>
+            
                 <div class="col border bg-light">
-                    2 of 2 
+                    <div class="container"></div>
+                        <br>
+                        <div class="row"> 
+                            <div class="col-md-6"> 
+                                    <img src={{ img_list[0] }} id="sel_image" class="w-100" alt="...">
+                            </div>   
+                            <div class="col-md-3 border bg-light" id="analysis-output"> 
+                                    
+                            </div>
+                        </div>
+
+                        <br>
+                        <div class="row"> 
+                            <div class="col-md-6">
+                                <button type="button" class="btn btn-primary float-right">Analyze</button>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
 
             </div>

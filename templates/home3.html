@@ -16,15 +16,18 @@
 
       <script typ="text/javascript"> 
         $(document).ready(function(){
-            $('button').on('click', function(){
+            $("img").first().addClass("selected"); 
+            
+
+            $('#analyze').on('click', function(){
+                var imageid = $("#sel_image").attr("src");
                 $.ajax({
                     url: '/analyze', 
-                    type: 'POST',
-                    data: "imageid",  
+                    type : 'POST', 
+                    contentType: 'application/json',
+                    data: JSON.stringify({"imageid" : imageid}),  
                     success: function(response){
-                        $("#analysis-output").html(
-                           "<p>" + response + "</p>" 
-                        );
+                        $('#analysis-output').attr("src",response);
                     }, 
                     error: function(error){
                         console.log(error)
@@ -35,20 +38,11 @@
             $(".thumbnail").bind('click', function(){
                 console.log("in load image function .. ")
                 var img_src = $(this).attr("src");
+                
+                $("img").removeClass("selected");
+                $(this).addClass("selected"); 
                 $('#sel_image').attr("src",img_src);
-
-                $.ajax ({
-                    url: '/load_image', 
-                    type: 'POST', 
-                    data : "imageid",
-                    success : function(response){
-                        console.log ("something image received"); 
-                        console.log(response);
-                    },
-                    error: function(error){
-                        console.log("error in load image")
-                    }
-                });
+                $('#analysis-output').attr("src", "static/pred_img/placeholder.png");
             });
         });
       
@@ -57,7 +51,7 @@
     <body>
         <div class="row">
             <div class="col border bg-info">
-                    <h1 class="display-8 text-white">Deep Learning Demo Application</h1> 
+                    <h1 class="display-8 text-white">Nuclei Segmentation - Deep Learning Demo</h1> 
                     <p class="text-white"> naveen.sabapathy@danaherdigital.com</p> 
                 
             </div>
@@ -78,7 +72,7 @@
                     {%for item in img_list %}
                         <div class="row">
                             <div class="col-md-12">
-                                <img src={{ item }} class="mx-auto d-block w-75 shadow border thumbnail img-fluid" alt="...">
+                                <img src={{ item }} class="mx-auto d-block w-75 thumbnail img-thumbnail" alt="...">
                             </div>
                         </div>
                         <hr class="my-6">
@@ -89,18 +83,18 @@
                     <div class="container"></div>
                         <br>
                         <div class="row"> 
-                            <div class="col-md-6"> 
-                                    <img src={{ img_list[0] }} id="sel_image" class="w-100" alt="...">
+                            <div class="col-md-5 border bg-ligh mx-auto d-block"> 
+                                    <img src={{ img_list[0] }} id="sel_image" class="img-fluid" alt="...">
                             </div>   
-                            <div class="col-md-3 border bg-light" id="analysis-output"> 
-                                    
+                            <div class="col-md-5 border bg-light mx-auto d-block"> 
+                                <img src="static/pred_img/placeholder.png" id="analysis-output" class="img-fluid" alt="...">   
                             </div>
                         </div>
 
                         <br>
                         <div class="row"> 
                             <div class="col-md-6">
-                                <button type="button" class="btn btn-primary float-right">Analyze</button>
+                                <button type="button" id="analyze" class="btn btn-primary float-right">Analyze</button>
                             </div>
                         </div>
 
@@ -108,12 +102,6 @@
                 </div>
 
             </div>
-             
-
-        
-             
-
-    
         </div>
     
     </body>
